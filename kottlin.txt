@@ -1,0 +1,71 @@
+<!-- Permissão para controlar o bluetooth do dispositivo (ativar, inativar e descobrir dispositivos) -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- Permite que o dispositivo acesse funcionalidades básicas do bluetooth como conectar e transferir dados -->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Permite que o aplicativo execute serviços em primeiro plano -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Permite que o app acesse a localização precisa do dispositivo -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> -->
+    <!-- Permite que o app acesse a localização aproximada do dispositivo -->
+    <uses-permission android:name="ACCESS_COARSE_LOCATION" />
+
+
+    <!-- Solicitar acesso ao NFC no AndroidManifest -->
+    <!--<uses-permission android:name="android.permission.NFC" />-->
+    <!-- valor real será determinado pelo Gradle <uses-sdk android:minSdkVersion="10"/> -->
+    <!-- Elemento uses-feature para que o app só apareça no google play para dispositivos com hardware NFC -->
+    <!--<uses-feature android:name="android.hardware.nfc" android:required="true" />-->
+
+
+    <!-- Declarar filtro de intenção junto como tipo de dado que vc quer filtrar (tipo de dado - ACTION_NDEF_DISCOVERED) -->
+            <!--<intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>-->
+
+            <!-- Declarar filtro de intenção junto como tipo de dado que vc quer filtrar (tipo de dado - ACTION_TECH_DISCOVERED) -->
+            <!--Necessário criar arquivo xml em <project-root>/res/xml para especificar as tecnologias com suporte da sua atividade em um conjunto tech-list-->
+            <!--<intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+            </intent-filter>
+            <meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@layout/resources_action_tech_discovered"/>-->
+
+            <!-- Declarar filtro (tipo de dado - ACTION_TAG_DISCOVERED)-->
+            <!--<intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+            </intent-filter>-->
+
+
+<!--Permissão ACESS.NETWORK.STATE - VERIFICAR CONEXÃO COM A INTERNET-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val btnVerificarConexao = findViewById<Button>(R.id.btnVerificarConexao)
+        btnVerificarConexao.setOnClickListener{
+            verificarConexao()
+        }
+    }
+
+    private fun verificarConexao() {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = cm.activeNetworkInfo
+        val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
+        if (isConnected) {
+            Toast.makeText(this, "Conexão disponível!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Conexão não está disponível!", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
+<Button
+            android:id="@+id/btnVerificarConexao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:text="Verificar conexão"/>
